@@ -16,44 +16,50 @@ import { NotImplementedError } from '../extensions/index.js';
 export default function transform(arr) {
   // throw new NotImplementedError('Not implemented');
   // remove line with error and write your code here
-  if (arr) {
-    try {
-      if (!Array.isArray(arr)) {
-        throw new Error("'arr' parameter must be an instance of the Array!")
-      } else {
-        const handledArray = []
-        const tempArray =  arr.slice()
-
-        tempArray.forEach((element, index) => {
-          switch (element) {
-            case '--discard-next':
-              if (tempArray[index + 1]) {
-                tempArray.splice(index + 1, 1)
-              }
-              break;
-            case '--double-next':
-              if (tempArray[index + 1]) {
-                tempArray[index +1] = 2 * arr[index +1]
-              }
-              break;
-            case '--discard-prev':
-              if (handledArray.length) {
-                handledArray.pop()
-              }
-              break;
-            case '--double-prev':
-              if (handledArray.length) {
-                handledArray[handledArray.length - 1] = 2 * handledArray[handledArray.length - 1]
-              }
-              break;
-            default:
-              handledArray.push(element)
-          }
-        })
-        return handledArray
-      }
-    } catch (error) {
+  try {
+    if (!Array.isArray(arr)) {
       throw new Error("'arr' parameter must be an instance of the Array!")
     }
+  } catch {
+    throw new Error("'arr' parameter must be an instance of the Array!")
   }
+
+
+  const tempArray = arr.slice()
+
+  tempArray.forEach((element, index) => {
+    switch (element) {
+      case '--discard-next':
+        if (tempArray[index + 1]) {
+          tempArray.splice(index, 2)
+        } else {
+          tempArray.splice(index, 1)
+        }
+        break;
+      case '--double-next':
+        if (tempArray[index + 1]) {
+          element = tempArray[index + 1]
+        } else {
+          tempArray.splice(index, 1)
+        }
+        break;
+      case '--discard-prev':
+        if (tempArray[index - 1]) {
+          tempArray.splice(index - 1, 2)
+        } else {
+          tempArray.splice(index, 1)
+        }
+        break;
+      case '--double-prev':
+        if (tempArray[index - 1]) {
+          tempArray.splice(index - 1, 2, tempArray[index - 1], tempArray[index - 1])
+        } else {
+          tempArray.splice(index, 1, tempArray[index - 1])
+        }
+        break;
+      default:
+      // handledArray.push(element)
+    }
+  })
+  return tempArray
 }

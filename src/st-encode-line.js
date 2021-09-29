@@ -11,28 +11,25 @@ import { NotImplementedError } from '../extensions/index.js';
  *
  */
 export default function encodeLine(str) {
-  if (str && typeof str === 'string' && str.length > 1) {
-    let strArray = str.split('')
-    strArray.forEach((item, index) => {
-      let counter
-      if (item === strArray[index + 1]) {
-        counter = 1
-        checkNext(strArray, index)
-        strArray.splice(index, counter, `${counter}${item}`)
+  let strArray = str.split('')
+  strArray.forEach((item, index) => {
+    let counter
+    if (item === strArray[index + 1]) {
+      counter = 1
+      checkNext(strArray, index)
+      strArray.splice(index, counter, `${counter}${item}`)
 
-        function checkNext(arr, index) {
-          if (arr[index] === arr[index + 1]) {
-            counter++
-            index++
-            checkNext(arr, index)
-          }
-          return
+      function checkNext(arr, index) {
+        if (arr[index] === arr[index + 1]) {
+          counter++
+          index++
+          checkNext(arr, index)
         }
-      } else {
-        counter = 1
+        return
       }
-    })
-    return strArray.join('')
-  }
+    } else {
+      counter = 1
+    }
+  })
+  return strArray.join('')
 }
-encodeLine('zxxxxbbwerrrweraabbbc')
